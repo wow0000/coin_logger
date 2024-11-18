@@ -1,9 +1,10 @@
 import time
 
 from coinbase.websocket import WSClient, WebsocketResponse
-import json, csv, os, gzip, datetime
+import json, csv, os, datetime
 from datetime import datetime
 import subprocess
+import time
 
 last_price = 0
 buffered_data = []
@@ -21,7 +22,7 @@ def log(data):
 	if last_price == data.price:
 		return
 	last_price = data.price
-	buffered_data.append([data.price, data.volume_24_h, data.low_24_h, data.high_24_h, data.low_52_w, data.high_52_w,
+	buffered_data.append([time.time_ns(), data.price, data.volume_24_h, data.low_24_h, data.high_24_h, data.low_52_w, data.high_52_w,
 	                      data.price_percent_chg_24_h, data.best_bid, data.best_ask, data.best_bid_quantity,
 	                      data.best_ask_quantity])
 	if len(buffered_data) >= 50:
