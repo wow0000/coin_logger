@@ -52,6 +52,7 @@ if __name__ == '__main__':
 			client = WSClient(key_file='./coinbase_cloud_api_key.json', on_message=on_message)
 			client.open()
 			client.subscribe(product_ids=["BTC-USD"], channels=["ticker", "heartbeats"])
+			client.run_forever_with_exception_check()
 		except Exception as e:
 			print("client crashed", e)
 		time.sleep(5)
