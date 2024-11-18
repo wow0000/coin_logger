@@ -31,6 +31,7 @@ def log(data):
 		buffered_data.clear()
 		if os.stat('output.csv').st_size > 1 * 1024 * 1024 * 1024:
 			new_name = get_time() + ".csv"
+			print('compressing', new_name)
 			os.rename('output.csv', new_name)
 			subprocess.Popen(["gzip", new_name])
 
@@ -47,6 +48,7 @@ def on_message(msg):
 if __name__ == '__main__':
 	while 1:
 		try:
+			print("running")
 			client = WSClient(key_file='./coinbase_cloud_api_key.json', on_message=on_message)
 			client.open()
 			client.subscribe(product_ids=["BTC-USD"], channels=["ticker", "heartbeats"])
