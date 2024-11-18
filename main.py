@@ -1,3 +1,5 @@
+import time
+
 from coinbase.websocket import WSClient, WebsocketResponse
 import json, csv, os, gzip, datetime
 from datetime import datetime
@@ -6,8 +8,10 @@ import subprocess
 last_price = 0
 buffered_data = []
 
+
 def get_time():
 	return datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+
 
 def log(data):
 	global last_price
@@ -30,6 +34,7 @@ def log(data):
 			os.rename('output.csv', new_name)
 			subprocess.Popen(["gzip", new_name])
 
+
 def on_message(msg):
 	ws_object = WebsocketResponse(json.loads(msg))
 	if ws_object.channel == 'ticker':
@@ -45,6 +50,6 @@ if __name__ == '__main__':
 			client = WSClient(key_file='./coinbase_cloud_api_key.json', on_message=on_message)
 			client.open()
 			client.subscribe(product_ids=["BTC-USD"], channels=["ticker", "heartbeats"])
-
-		except:
-			print("client crashed")
+		except Exception as e:
+			print("client crashed", e)
+		time.sleep(5)
